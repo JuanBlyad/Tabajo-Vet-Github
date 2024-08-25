@@ -16,12 +16,14 @@ class ClinicaVeterinaria:
     def __init__(self):
         self.mascotas = []
 
+    def generar_numero_historia(self):
+        if not self.mascotas:
+            return 1
+        return max(m.numero_historia for m in self.mascotas) + 1
+
     def ingresar_mascota(self, mascota):
         if len(self.mascotas) >= 10:
             return "No se pueden admitir más mascotas."
-        for m in self.mascotas:
-            if m.numero_historia == mascota.numero_historia:
-                return "Ya existe una mascota con ese número de historia clínica."
         self.mascotas.append(mascota)
         return f"Mascota {mascota.nombre} ingresada con éxito."
 
@@ -46,3 +48,25 @@ class ClinicaVeterinaria:
                 self.mascotas.remove(m)
                 return True
         return False
+
+    def buscar_mascota(self, numero_historia):
+        for m in self.mascotas:
+            if m.numero_historia == numero_historia:
+                return m
+        return None
+
+    def editar_mascota(self, numero_historia, nombre=None, tipo=None, peso=None, fecha_ingreso=None, medicamentos=None):
+        mascota = self.buscar_mascota(numero_historia)
+        if mascota:
+            if nombre:
+                mascota.nombre = nombre
+            if tipo:
+                mascota.tipo = tipo
+            if peso:
+                mascota.peso = peso
+            if fecha_ingreso:
+                mascota.fecha_ingreso = fecha_ingreso
+            if medicamentos:
+                mascota.medicamentos = medicamentos
+            return f"Mascota {mascota.nombre} actualizada con éxito."
+        return "La mascota no está en el sistema."
